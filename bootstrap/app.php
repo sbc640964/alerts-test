@@ -1,5 +1,6 @@
 <?php
 
+use App\AlertService;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -16,21 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withSchedule(function (Schedule $schedule): void {
         //
-        $schedule->call(function () {
-            try {
-                $res = Http::timeout(3)->get('https://www.oref.org.il/warningMessages/alert/Alerts.json');
-                if($res->successful()) {
-                    $json = $res->json();
-                    $json && Log::error('New Alert', $json);
-                }
-
-                if($res->failed()) {
-                    Log::error('Failed to fetch alerts'. $res->status());
-                }
-            } catch (Exception $e) {
-                    Log::error('Error fetching alerts: '.$e->getMessage());
-            }
-        })
+        $schedule->call(AlertService::class)
             ->name('Fetch Alerts')
             ->everyTwoSeconds();
     })
