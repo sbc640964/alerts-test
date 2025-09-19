@@ -18,7 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
         //
         $schedule->call(function () {
             try {
-                $res = Http::get('https://www.oref.org.il/warningMessages/alert/Alerts.json');
+                $res = Http::timeout(3)->get('https://www.oref.org.il/warningMessages/alert/Alerts.json');
                 if($res->successful()) {
                     $json = $res->json();
                     $json && Log::error('New Alert', $json);
