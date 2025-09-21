@@ -26,9 +26,7 @@ class AlertService
 
                 if($json){
                     Log::error('New Alert', $json);
-                    if(in_array($json['cat'], ['10', '1', '14'])) {
-                        Http::post('https://app.yeda-phone.com/api/alerts/oref/', $json);
-                    }
+                    Http::post('https://app.yeda-phone.com/api/alerts/oref/', $json);
                 }
             }
 
